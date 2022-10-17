@@ -18,16 +18,15 @@ parameters like black, green, italic etc.
 ANSI Escape Codes for Terminal Graphics
 
 The ANSI  escape code standard, formally adopted as ISO/IEC 6429,
-defines a series of  control   sequences.  Each  control sequence
-begins  with a Control  Sequence Introducer (CSI), defined  as an
-escape character followed immediately  by a bracket:  `ESC[`. The
-ANSI  ASCII  standard  represents the escape ESC character by the
-decimal number 27 (33 in octal, 1B in hexadecimal). The `ESC[` is
-followed by any number (including   none) of "parameter bytes" in
-the range `0x30–0x3F` (ASCII 0–9:;<=>?),  then  by any  number of
-"intermediate  bytes" in the  range `0x20–0x2F` (ASCII  space and
-!"#$%&'()*+,-./), then finally  by  a single "final byte"  in the
-range `0x40–0x7E` (ASCII @A–Z[\]^_a–z{|}~`).
+defines a  series of  control   sequences.  Each  control sequenc
+e begins  with a Control   Sequence Introducer (CSI), defined  as
+an escape character followed immediately   by a bracket:  `ESC[`.
+The ANSI  ASCII  standard  represents the escape ESC character by
+the decimal number 27 (33 in octal, 1B in hexadecimal).  The `ESC
+[` is followed by any number (including   none) of "parameter byt
+es" in the range `0x30–0x3F`,  then  by any  number of "intermedi
+ate bytes" in the  range `0x20–0x2F`,  then finally  by  a single
+"final byte"  in the range `0x40–0x7E`.
 
 All  common sequences just   use  the parameters as  a  series of
 semicolon-separated numbers. Missing numbers are treated as 0 and
@@ -208,7 +207,7 @@ def update_formatters_classes(cls):
     return (cls, notInList)
 
 
-## Adding method aliases to Foreground and Background classes
+# Adding method aliases to Foreground and Background classes
 #
 update_formatters_classes(ForegroundFormatters)
 update_formatters_classes(BackgroundFormatters)
