@@ -1,4 +1,4 @@
-|Black badge|
+|Test Package| |Black badge|
 
 Terminal Formatters
 ===================
@@ -189,5 +189,7 @@ References
 .. |how-to-print-colored-text-in-python| image:: https://user-images.githubusercontent.com/101603641/195437212-1de20dbd-47ce-43fa-826f-e8f069813e3b.jpg
 .. |colored-style--python| image:: https://user-images.githubusercontent.com/101603641/195454430-4856cf8d-3a71-4584-b462-cf56430c5d64.gif
 .. |colored-text--python| image:: https://user-images.githubusercontent.com/101603641/195454450-625c2d22-0b2e-4db0-8016-7c4cafad6116.jpg
+.. |Test Package| image:: https://github.com/amarienko/TerminalFormatters/actions/workflows/termformatters-main-lint-and-test.yaml/badge.svg?branch=main
+   :target: https://github.com/amarienko/TerminalFormatters/actions/workflows/termformatters-main-lint-and-test.yaml
 .. |Black badge| image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/psf/black
