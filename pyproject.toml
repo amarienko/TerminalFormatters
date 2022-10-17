@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=59.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "termformatters"
+version = "0.2.1rc1"
+authors = [
+  { name="Alex Marienko", email="alexey.maryenko@gmail.com" },
+]
+description = "Terminal font style and base 16 colors formatters"
+readme = "README.rst"
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3 :: Only",
+    "Environment :: Console",
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Operating System :: POSIX",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: POSIX :: Other",
+    "Operating System :: POSIX :: BSD",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Operating System :: MacOS :: MacOS X"
+]
+keywords = [
+    "terminal",
+    "font",
+    "colors",
+    "styles",
+    "formatter",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/amarienko/TerminalFormatters"
+"Bug Tracker" = "https://github.com/amarienko/TerminalFormatters/issues"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -vv --full-trace --collect-in-virtualenv"
+testpaths = [
+    "src",
+]
