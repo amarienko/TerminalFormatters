@@ -93,9 +93,8 @@ jobs:
           updateOnlyUnreleased: false
       - name: Publish distribution to Test PyPI
         # https://github.com/pypa/gh-action-pypi-publish
-        if: ${{ success() }}
+        if: ${{ success() }} && github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
         id: publish_to_test_pypi
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           # Tolerating release package file duplicates
