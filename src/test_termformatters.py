@@ -110,9 +110,25 @@ class TestFormatters(unittest.TestCase):
         """
 
         # Formatters instances
+        print("\n")
         S = StyleFormatters()
+        if S:
+            self.assertIsInstance(
+                S, StyleFormatters, msg="Error creating instance: {}".format(S)
+            )
+            print("Style Formatter: {}".format(S))
         FG = ForegroundFormatters()
+        if FG:
+            self.assertIsInstance(
+                FG, ForegroundFormatters, msg="Error creating instance: {}".format(FG)
+            )
+            print("Foreground Formatter: {}".format(FG))
         BG = BackgroundFormatters()
+        if BG:
+            self.assertIsInstance(
+                BG, BackgroundFormatters, msg="Error creating instance: {}".format(BG)
+            )
+            print("Background Formatter: {}".format(BG))
 
         print()
         self.allBaseFormats = {
