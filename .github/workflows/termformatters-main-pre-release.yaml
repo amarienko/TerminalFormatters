@@ -1,0 +1,118 @@
+# Building and publishing pre-release to GitHub and Test PyPI workflow
+#
+# v0.2.1
+name: Pre-Release Publication
+
+on:
+  # References:
+  #
+  # https://docs.github.com/en/actions/learn-github-actions
+  #
+  # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+  # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+  # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
+  # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
+  # https://docs.github.com/en/actions/using-jobs/using-jobs-in-a-workflow
+  #
+  push:
+    tags:
+      - "*.*.[0-9]+rc*"
+
+jobs:
+  build_and_upload:
+    name: Building and uploading a pre-release
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Python 3.x
+        id: setup_py310
+        # https://github.com/actions/setup-python
+        uses: actions/setup-python@v4
+        with:
+          # Semantic version range syntax or exact version of a Python version
+          python-version: '3.10'
+          # Optional - x64 or x86 architecture, defaults to x64
+          architecture: 'x64'
+          update-environment: true
+          #cache: 'pip'  # disabled: caching pip dependencies
+      - name: Display Python version
+        # Printing the current Python version and path
+        run: |
+          python -c "import sys; print(sys.version)"
+          echo '${{ steps.setup_py310.outputs.python-path }}'
+      - name: Install package dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Install build packages
+        run: |
+          pip install --upgrade build setuptools wheel twine
+      - name: Build package source tarball and binary wheel
+        run: |
+          python -m build
+      - name: Check package with twine
+        run: |
+          if [ -d "dist" ]; then twine check dist/*; fi
+      - name: Pre-release publication
+        # https://github.com/ncipollo/release-action
+        # https://docs.github.com/en/rest/releases/assets#get-a-release-asset
+        id: creating_prerelease
+        if: ${{ success() }} && startsWith(github.ref, 'refs/tags/')
+        uses: ncipollo/release-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # Secret GitHub Personal Access Token. Defaults to ${{ github.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # Name of a tag. defaults to github.ref
+          tag: ${{ github.ref }}
+          # Indicator of whether or not is a prerelease
+          prerelease: true
+          # Indicator of whether or not this release is a draft
+          draft: false
+          # Name of the release. defaults to tag name
+          name: ""
+          # Indicates if release notes should be automatically generated
+          generateReleaseNotes: false
+          # Indicates if the release name should be omitted
+          omitName: true
+          omitNameDuringUpdate: false
+          # An optional set of paths representing artifacts to upload to the
+          # release
+          artifacts: "dist/*.tar.gz,dist/*.whl"
+          # Indicates if existing release artifacts should be replaced
+          replacesArtifacts: true
+          # An optional flag which indicates if we should update a release if it
+          # already exists. Defaults to false.
+          allowUpdates: true
+          updateOnlyUnreleased: false
+      - name: Publish distribution to Test PyPI
+        # https://github.com/pypa/gh-action-pypi-publish
+        if: ${{ success() }}
+        id: publish_to_test_pypi
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          # Tolerating release package file duplicates
+          skip_existing: true
+          # Debugging upload with twine
+          verbose: true
+          # Showing hash values of files to be uploaded
+          print_hash: true
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
+      - name: Print post publication info
+        run: |
+          echo "Release ID: "${{ steps.creating_prerelease.outputs.id }}
+          echo "Release ready at "${{ steps.creating_prerelease.outputs.html_url }}
+          echo "Upload to "${{ steps.creating_prerelease.outputs.upload_url }}
+          echo ""
+          if [ -d "dist" ]; then echo "Package assets: " && ls dist; fi
+          echo ""
+          echo "✅ Operation Completed!"
