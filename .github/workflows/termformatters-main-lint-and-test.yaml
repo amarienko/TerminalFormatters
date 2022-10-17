@@ -34,7 +34,7 @@ jobs:
           src: "./src"
           version: "~= 22.0"
       - name: Set up Python 3.x ${{ matrix.python-version }}
-        id: setup_py3.x
+        id: setup_py3x
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
