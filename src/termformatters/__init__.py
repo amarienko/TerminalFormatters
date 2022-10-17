@@ -106,13 +106,7 @@ References
     https://en.wikipedia.org/wiki/ANSI_escape_code
 """
 __version__ = "0.2.1"
-import sys
-
-"""Wrappers"""
-from .base import SelectFormatter
-from .base import BaseFormat
-
-"""Main Formatters"""
+# Main Formatters import
 from .base import StyleFormatters
 from .base import ForegroundFormatters
 from .base import BackgroundFormatters
@@ -159,17 +153,20 @@ def update_formatters_classes(cls):
         "bg_cyan_bright",
         "bg_white_bright",
     ]
+
     # Main styles
-    stylesList = [
-        "green",
-        "bold",
-        "faint",
-        "italic",
-        "underline",
-        "blink",
-        "negative",
-        "concealed",
-    ]
+    # (disabled, additional aliases for styles will not be created)
+    #
+    # stylesList = [
+    #     "green",
+    #     "bold",
+    #     "faint",
+    #     "italic",
+    #     "underline",
+    #     "blink",
+    #     "negative",
+    #     "concealed",
+    # ]
 
     methodsList = [
         method

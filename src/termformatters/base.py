@@ -1,10 +1,7 @@
 """Base 16 collors formatter
 """
-import sys
-
 # https://docs.python.org/3/library/functools.html
-import functools
-from functools import wraps
+# import functools
 from functools import update_wrapper
 
 # https://docs.python.org/3/library/inspect.html
