@@ -1,0 +1,65 @@
+# Building and publishing release to Test PyPI workflow
+#
+# v0.2.1
+name: Release Publication Test PyPI
+
+on:
+  push:
+    tags:
+      - "!*rc*"
+      - "[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  build_and_upload:
+    name: Build and uploading a release
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Python 🐍 3.x
+        id: setup_py310
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          architecture: 'x64'
+          update-environment: true
+      - name: Display Python version
+        run: |
+          python -c "import sys; print(sys.version)"
+          echo '${{ steps.setup_py310.outputs.python-path }}'
+      - name: Install package dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Install build tools packages
+        run: |
+          pip install --upgrade build setuptools wheel twine
+      - name: Build package source tarball and binary wheel
+        run: >-
+          python -m
+          build
+          --sdist
+          --wheel
+          --outdir dist/
+          .
+      - name: Publish distribution 📦 to Test PyPI
+        id: publish_to_test_pypi
+        if: ${{ success() }} && github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip_existing: true
+          verbose: true
+          print_hash: true
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
+      - name: Print post publication info
+        run: |
+          echo ""
+          if [ -d "dist" ]; then echo "Package assets" && ls dist; fi
+          echo ""
+          echo "✅ Operation Completed!"
